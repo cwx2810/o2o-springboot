@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.imooc.o2o.dao.ShopCategoryDao">
+    <select id="queryShopCategory" resultType="com.imooc.o2o.entity.ShopCategory">
+        SELECT * FROM tb_shop_category
+        <where>
+            <!-- 支持返回一级类别 -->
+            <if test="shopCategoryCondition == null">
+                AND parent_id IS NULL
+            </if>
+            <!-- 条件查询，只能选出父节点不为空的类别，因为店铺都是在每个子类中 -->
+            <if test="shopCategoryCondition != null">
+                AND parent_id IS NOT NULL
+            </if>
+            <!-- 条件查询，如果有父节点，则设置父节点为父节点的id，也就是如果查询的是子类则只显示子类 -->
+            <if test="shopCategoryCondition != null and shopCategoryCondition.parent != null">
+                AND parent_id = #{shopCategoryCondition.parent.shopCategoryId}
+            </if>
+        </where>
+        ORDER BY priority DESC
+    </select>
+</mapper>

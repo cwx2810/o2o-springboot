@@ -22,12 +22,22 @@ public class SessionFactoryConfiguration {
     // 注入配置属性
     @Autowired
     private DataSource dataSource;
-    @Value("${mybatis_config_file}")
+
+    // 静态需要setter方法
     private static String mybatisConfig;
+    @Value("${mybatis_config_file}")
+    public void setMybatisConfig(String mybatisConfig) {
+        SessionFactoryConfiguration.mybatisConfig = mybatisConfig;
+    }
+
     @Value("${type_alias_package}")
     private String typeAliasPackage;
-    @Value("${mapper_path}")
+
     private static String mapperPath;
+    @Value("${mapper_path}")
+    public void setMapperPath(String mapperPath) {
+        SessionFactoryConfiguration.mapperPath = mapperPath;
+    }
 
     /**
      * 创建session工厂
